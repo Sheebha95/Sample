@@ -4,6 +4,8 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
+const employeeRoutes = require("./routes/employee");
+const requireAuth = require("./middleware/auth")
 
 const port = 5000;
 // const Product = require("./models/Product");
@@ -34,6 +36,7 @@ mongoose
 
   app.use('/api/products', productRoutes);
   app.use('/api/auth', authRoutes);
+  app.use("api/employee", requireAuth, employeeRoutes);
 
 
 // app.post("/product", async (req, res) => {
