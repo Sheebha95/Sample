@@ -2,10 +2,14 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+//const config = require("./config");
 const productRoutes = require("./routes/productRoutes");
 const authRoutes = require("./routes/authRoutes");
-const employeeRoutes = require("./routes/employee");
 const requireAuth = require("./middleware/auth")
+const EmployeeRoutes = require("./routes/employeeRoutes");
+
+
+
 
 const port = 5000;
 // const Product = require("./models/Product");
@@ -14,30 +18,40 @@ const port = 5000;
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+//app.use(bodyParser.json());
 //This built-in middleware was added in Express version 4.16.0 to simplify request body parsing
-// app.use(express.json());
+app.use(express.json());
 
 // Connect to MongoDB
-mongoose
-  .connect(
-    "mongodb+srv://ranisheebha:Its123@cluster0.d4u9mqj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(() => {
-    console.log("Connected to MongoDB");
-  })
-  .catch((err) => {
-    console.error("Error connecting to MongoDB:", err);
-  });
+//console.log(config.mongodbUri);
+// mongoose.connect("mongodb+srv://ranisheebha:Its123@cluster0.d4u9mqj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0",   {
+//       useNewUrlParser: true,
+//       useUnifiedTopology: true,
+//     });
+//   const db = mongoose.connection;
+//   console.log("Hello");
+//   db.on("Error", console.error.bind(console, "mongoDB connection Error"));
+//   console.log("connection");
+//   //app.use(cors());
+//   //app.use(bodyParser.json()); 
+//   app.get("/", async (req, res) => {
+//     res.send("The Server is running");
+//   });
+//   console.log("server");
 
+mongoose.connect("mongodb+srv://ranisheebha:Its123@cluster0.d4u9mqj.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error('Failed to connect to MongoDB:', err));
+
+
+  //Routes
   app.use('/api/products', productRoutes);
   app.use('/api/auth', authRoutes);
-  app.use("api/employee", requireAuth, employeeRoutes);
-
+  //app.use("api/employees", EmployeeRoutes);
+  app.use("api/employees", EmployeeRoutes);
 
 // app.post("/product", async (req, res) => {
 //     try {
@@ -128,4 +142,6 @@ mongoose
   app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
   });
+
+  
 

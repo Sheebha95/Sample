@@ -4,5 +4,5 @@ const config = {
     mongodbUri: process.env.MONGODB_URI,
     jwtSecret: process.env.JWT_SECRET,
 };
-
+console.log(process.env.MONGODB_URI);
 module.exports = config;

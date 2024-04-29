@@ -1,5 +1,7 @@
 const jwt = require("jsonwebtoken");
 const User = require ("../models/user");
+const config = require("../config");
+
 
 const requireAuth = async (req, res, next) => {
     try{
@@ -10,7 +12,7 @@ const requireAuth = async (req, res, next) => {
             return res.status(401).json({error: "Unauthorization"});
         }
 
-        const decodeToken = await jwt.verify(token, process.env.JWT_SECRET);
+        const decodeToken = await jwt.verify(token, config.jwtSecret);
         console.log("decoded", decodeToken);
 
         const user = await User.findById(decodeToken.userId);

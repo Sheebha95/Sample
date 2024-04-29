@@ -1,10 +1,21 @@
-//const employee = require("../models/employee");
 const Employee = require("../models/employee");
 
 const addEmployee = async (req, res) => {
-    try{
+    const employee = new Employee({
+        empid: req.body.empid,
+        name: req.body.name,
+        designation: req.body.designation,
+        address: req.body.address,
+        phoneno: req.body.phoneno,
+        email: req.body.email,
+        gender: req.body.gender
+        });
+        console.log("testing");
+        try{
+          console.log("testing2");
         const newEmployee = await employee.save();
-    res.status(201).json(newEmployee);
+        console.log("testing1");
+        res.status(201).json(newEmployee);
   } catch (err) {
     res.status(400).json({ message: err.message });
   }
@@ -13,9 +24,10 @@ const addEmployee = async (req, res) => {
 const getEmployee = async (req, res) => {
     try {
       const employees = await Employee.find();
+      //res.status(201).json(employees);
       res.json(employees);
     } catch (err) {
-      res.status(500).json({ message: err.message });
+      res.status(501).json({ message: err.message });
     }
   };
 
@@ -33,10 +45,11 @@ const getEmployee = async (req, res) => {
 
   const deleteEmployee = async (req, res) => {
     try {
-      const deleteEmployee = await Employee.findByIdAndDelete(req.params.id);
-      if (deleteEmployee.deleteCount == 0){
-        res.status(404).json({message: "employee details are not found"});
-      }
+      await Employee.findOneAndDelete(req.params.id);
+      // const deleteEmployee = await Employee.findByIdAndDelete(req.params.id);
+      // if (deleteEmployee.deleteCount == 0){
+      //   res.status(404).json({message: "employee details are not found"});
+      // }
       res.json({ message: 'Employee Details deleted' });
     } catch (err) {
       res.status(500).json({ message: err.message });
@@ -45,10 +58,11 @@ const getEmployee = async (req, res) => {
 
   const updateEmployee = async (req, res) => {
     try {
-      const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true });
-      if (employee == null){
-        res.status(404).json({message: "employee details updated failed"});
-      }
+      const updateEmployee = await Employee.findByIdAndUpdate(req.params.id, req.body, {new: true});
+      // const employee = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true });
+      // if (employee == null){
+      //   res.status(404).json({message: "employee details updated failed"});
+      // }
       res.json(updateEmployee);
     } catch (err) {
       res.status(400).json({ message: err.message });
